@@ -1,0 +1,5 @@
+**/__pycache__/*
+cipherlists/*
+!cipherlists/.gitkeep
+results/*
+!results/.gitkeep
