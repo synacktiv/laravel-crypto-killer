@@ -123,6 +123,13 @@ class LaravelCryptoKiller():
         parser_bruteforce.add_argument("--value", "-v", default="", help="Value of the laravel ciphered data on which you want to perform a bruteforce", required=False)
         parser_bruteforce.add_argument("--threads", "-t", type=int, default=10, help="Number of threads used during bruteforce (Default 10)", required=False)
         parser_bruteforce.add_argument("--result_file", default="results/results.json", help="File in which you want to save your results (default results/results.json)", required=False)
+
+        # Check options
+        parser_check = subparsers.add_parser('check', help="Check the valid of an "
+                                                           "APP_KEY against a website")
+        parser_check.add_argument('APP_URL', help="Website URL to check")
+        parser_check.add_argument('APP_KEY', help="Key to check")
+
         args = parser.parse_args()
 
         if args.subparser_name == "encrypt":
@@ -194,6 +201,19 @@ class LaravelCryptoKiller():
                     json.dump(stats, file_results, ensure_ascii=False, indent=4)
                 os._exit(0)
             print("[-] No key identified during the bruteforce attempt :(")
+        elif args.subparser_name == "check":
+            from lib.core.checker import checker
+            cookies_decrypted = checker(args.APP_URL, args.APP_KEY)
+            if cookies_decrypted:
+                print("[+] Cookies decrypted:")
+                for cookie, value in cookies_decrypted.items():
+                    print(f"    * {cookie}", end="")
+                    if LaravelCryptoKiller().is_serialized_data(value.decode("utf-8")):
+                        print(" (contains serialized data)", end="")
+                    print()
+            else:
+                print("[-] No cookies decrypted.")
+
 
 if __name__ == "__main__":
     laravel_crypto_killer = LaravelCryptoKiller()
