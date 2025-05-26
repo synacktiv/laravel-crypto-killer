@@ -20,7 +20,7 @@ A helper can be used on each option to use the tool:
 
 ```bash
 $ ./laravel_crypto_killer.py -h
-usage: laravel_crypto_killer.py [-h] {encrypt,decrypt,bruteforce} ...
+usage: laravel_crypto_killer.py [-h] {encrypt,decrypt,bruteforce,check} ...
 
  ___                                _       ___                    _             __       _   _              
 (O O)                              (_ )    ( O_`\                 ( )_          ( O)    _(_ )(_ )            
@@ -34,6 +34,7 @@ usage: laravel_crypto_killer.py [-h] {encrypt,decrypt,bruteforce} ...
     encrypt             Encrypt mode
     decrypt             Decrypt mode
     bruteforce          Bruteforce potential values of APP_KEY. By default, all the values from the folder wordlists will be loaded.
+    check               Check the validity of an APP_KEY against a website
 
 $ ./laravel_crypto_killer.py encrypt -h
 usage: laravel_crypto_killer.py encrypt [-h] [--key KEY] --value VALUE
@@ -154,6 +155,16 @@ In order to identify a valid `APP_KEY` on an application, several wordlists can 
 
 By default, the `XSRF-TOKEN` and `laravel_session` cookies are based on the `encrypt` function and can be used to perform a bruteforce attempt.
 
+## Check mode
+
+You can easily check the validity of a `APP_KEY` against a URL with the following command:
+
+```bash
+$ ./laravel_crypo_killer.py check https://www.example.com ko0ziOprodjT9TOcW3/CP2vyA3pjaRzz0ANa1uiCPU0=
+[+] Cookies decrypted:
+    * XSRF-TOKEN
+    * example_session
+```
 
 ## Exploit a session stored in the cookie
 
@@ -206,7 +217,7 @@ uid=1000(user) gid=1000(user) groups=1000(user),0(root),33(www-data)
 
 ## Contribution
 
-You have a cool idea, you encoutered an unexpected behavior? Please let us know by opening an issue or submiting a pull request ! :)
+You have a cool idea, you encountered an unexpected behavior? Please let us know by opening an issue or submitting a pull request ! :)
 
 # Disclaimer
 
