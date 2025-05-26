@@ -34,7 +34,7 @@ usage: laravel_crypto_killer.py [-h] {encrypt,decrypt,bruteforce,check} ...
     encrypt             Encrypt mode
     decrypt             Decrypt mode
     bruteforce          Bruteforce potential values of APP_KEY. By default, all the values from the folder wordlists will be loaded.
-    check               Check the valid of an APP_KEY against a website
+    check               Check the validity of an APP_KEY against a website
 
 $ ./laravel_crypto_killer.py encrypt -h
 usage: laravel_crypto_killer.py encrypt [-h] [--key KEY] --value VALUE

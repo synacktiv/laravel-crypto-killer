@@ -73,7 +73,7 @@ class LaravelEncrypter:
         except json.decoder.JSONDecodeError:
             raise LaravelEncrypterError("[-] The JSON inside your base64 is malformed")
             sys.exit(1)
-        except binascii.Error:
+        except (binascii.Error, UnicodeDecodeError):
             raise LaravelEncrypterError("[-] your base64 laravel_cipher value is malformed")
             sys.exit(0)
         data["value"] = base64.b64decode(data["value"])
