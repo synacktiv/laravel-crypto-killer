@@ -3,7 +3,7 @@ import json
 import sys
 import base64
 from lib.core.crypto_verb import CryptoVerb
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 
 """
 Class used to perform an AES encryption compatible with Laravel
