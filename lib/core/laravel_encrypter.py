@@ -8,7 +8,7 @@ import os
 from lib.core.aes_encrypter import AESEncrypter
 from lib.core.crypto_verb import CryptoVerb
 from urllib.parse import unquote
-from Crypto import Random
+from Cryptodome import Random
 
 __all__ = [
     "LaravelEncrypterError",
