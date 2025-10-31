@@ -1,5 +1,5 @@
 from enum import Enum
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 
 """
 Enum Verb, defines all usable crypto
