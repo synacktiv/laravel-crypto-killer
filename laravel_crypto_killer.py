@@ -86,7 +86,7 @@ class LaravelCryptoKiller():
 
     
     def main(self):
-        usage = """
+        usage = r"""
  ___                                _       ___                    _             __       _   _              
 (O O)                              (_ )    ( O_`\                 ( )_          ( O)    _(_ )(_ )            
  | |      _ _ _ __  _ _ _   _   __  | |    | ( (_)_ __ _   _ _ _  | ,_)  _      |  |/')(_)| | | |   __  _ __ 
